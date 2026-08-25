@@ -1,129 +1,232 @@
-/* customizable snowflake styling */
+/* ================================
+   GOLD BUTTON
+   ================================ */
+
+/* Styles the button inside the loader */
 .loader button {
-    width: 50%;
-    height: 100px;
-    position: fixed;
-    left: 50%;
-    top: 45%;
+    width: 50%; /* Makes the button half the screen width */
+    height: 100px; /* Sets the button height */
+    position: fixed; /* Keeps the button in one place on the screen */
+    left: 50%; /* Moves the button to the horizontal center */
+    top: 45%; /* Places the button slightly above the center */
+    
+    /* Centers the button using its own size */
     transform: translateY(-50%);
     transform: translateX(-50%);
-    background: center no-repeat #fff;
-    z-index: 9999999999999999999999;
-    font-size: 50px;
-    outline: none;
-    box-sizing: border-box;
-    border: none;
-    border-radius: .3em;
-    text-transform: uppercase;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, .16), 0 3px 6px rgba(110, 80, 20, .4),
+
+    background: center no-repeat #fff; /* White background */
+    z-index: 9999999999999999999999; /* Keeps the button above other elements */
+    font-size: 50px; /* Makes the button text large */
+    outline: none; /* Removes the default outline */
+    box-sizing: border-box; /* Includes padding and border in the size */
+    border: none; /* Removes the default border */
+    border-radius: .3em; /* Makes the corners rounded */
+
+    text-transform: uppercase; /* Makes text uppercase */
+
+    /* Adds a shadow around and inside the button */
+    box-shadow: 
+        0 3px 6px rgba(0, 0, 0, .16),
+        0 3px 6px rgba(110, 80, 20, .4),
         inset 0 -2px 5px 1px rgba(139, 66, 8, 1),
         inset 0 -1px 1px 3px rgba(250, 227, 133, 1);
-    background-image: linear-gradient(160deg, #a54e07, #b47e11, #fef1a2, #bc881b, #a54e07);
-    border: 1px solid #a55d07;
-    color: rgb(120, 50, 5);
-    text-shadow: 0 2px 2px rgba(250, 227, 133, 1);
-    cursor: pointer;
-    transition: all .2s ease-in-out;
-    background-size: 100% 100%;
-    background-position: center;
+
+    /* Creates a gold gradient */
+    background-image: linear-gradient(
+        160deg,
+        #a54e07,
+        #b47e11,
+        #fef1a2,
+        #bc881b,
+        #a54e07
+    );
+
+    border: 1px solid #a55d07; /* Adds a thin gold border */
+    color: rgb(120, 50, 5); /* Sets the text color */
+    text-shadow: 0 2px 2px rgba(250, 227, 133, 1); /* Adds glow to the text */
+    cursor: pointer; /* Changes the mouse pointer to a hand */
+    transition: all .2s ease-in-out; /* Makes changes animate smoothly */
+    background-size: 100% 100%; /* Sets the gradient size */
+    background-position: center; /* Centers the gradient */
 }
 
+
+/* ================================
+   BUTTON HOVER / FOCUS
+   ================================ */
+
+/* Changes the button when the mouse is over it or it is selected */
 .golden-btn:focus,
 .golden-btn:hover {
-    background-size: 150% 150%;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23),
+    background-size: 150% 150%; /* Makes the gold gradient look bigger */
+
+    /* Makes the button look raised */
+    box-shadow:
+        0 10px 20px rgba(0, 0, 0, 0.19),
+        0 6px 6px rgba(0, 0, 0, 0.23),
         inset 0 -2px 5px 1px #b17d10,
         inset 0 -1px 1px 3px rgba(250, 227, 133, 1);
-    border: 1px solid rgba(165, 93, 7, .6);
-    color: rgba(120, 50, 5, .8);
+
+    border: 1px solid rgba(165, 93, 7, .6); /* Changes the border */
+    color: rgba(120, 50, 5, .8); /* Slightly changes text color */
 }
 
+
+/* Changes the button when it is being clicked */
 .golden-btn:active {
-    box-shadow: 0 3px 6px rgba(0, 0, 0, .16), 0 3px 6px rgba(110, 80, 20, .4),
+    box-shadow:
+        0 3px 6px rgba(0, 0, 0, .16),
+        0 3px 6px rgba(110, 80, 20, .4),
         inset 0 -2px 5px 1px #b17d10,
         inset 0 -1px 1px 3px rgba(250, 227, 133, 1);
 }
 
+
+/* ================================
+   LOADING SCREEN
+   ================================ */
+
+/* Creates a full-screen loading area */
 .loader {
-    position: fixed;
-    left: 0px;
-    top: 0px;
-    width: 100%;
-    height: 100%;
-    z-index: 999;
+    position: fixed; /* Keeps the loader fixed on the screen */
+    left: 0px; /* Starts from the left side */
+    top: 0px; /* Starts from the top */
+    width: 100%; /* Uses the full screen width */
+    height: 100%; /* Uses the full screen height */
+    z-index: 999; /* Places the loader above most elements */
+
+    /* Adds the background image */
     background: url(img/back.png) center no-repeat #000;
 }
 
+
+/* Hides the song/audio element */
 .song {
-    display: none;
+    display: none; /* The audio player will not be visible */
 }
 
+
+/* ================================
+   PAGE BACKGROUND
+   ================================ */
+
+/* Sets the main page background color */
 body {
-    background-color: #FFDAB9;
+    background-color: #FFDAB9; /* Light peach background */
 }
 
+
+/* Makes all images fill their container */
 img {
-    width: 100%;
+    width: 100%; /* Image takes the full available width */
 }
 
+
+/* ================================
+   BALLOON BORDER
+   ================================ */
+
+/* Places the balloon decoration at the bottom */
 .balloon-border {
-    position: fixed;
-    top: 100%;
-    opacity: 0.5;
-    z-index: 99999999;
+    position: fixed; /* Keeps balloons fixed on the screen */
+    top: 100%; /* Positions them at the bottom */
+    opacity: 0.5; /* Makes them semi-transparent */
+    z-index: 99999999; /* Keeps balloons above other elements */
 }
 
+
+/* ================================
+   MAIN TEXT
+   ================================ */
+
+/* Styles the main birthday text */
 .area {
-    text-align: center;
-    font-size: 70px;
-    color: #C4515C;
-    letter-spacing: -7px;
-    font-weight: 700;
-    text-transform: uppercase;
+    text-align: center; /* Centers the text */
+    font-size: 70px; /* Makes the text large */
+    color: #C4515C; /* Sets the text color */
+    letter-spacing: -7px; /* Reduces space between letters */
+    font-weight: 700; /* Makes the text bold */
+    text-transform: uppercase; /* Makes the text uppercase */
+
+    /* Adds a shaking/rotating animation */
     animation: spin 2s ease-out infinite;
-    text-shadow: 0px 0px 5px #fff, 0px 0px 7px #fff;
+
+    /* Adds a white glow around the text */
+    text-shadow:
+        0px 0px 5px #fff,
+        0px 0px 7px #fff;
 }
 
+
+/* Makes the text use normal capitalization */
 #nae {
     text-transform: capitalize;
 }
 
+
+/* ================================
+   CONFETTI
+   ================================ */
+
+/* Makes the confetti cover the whole screen */
 #confetti {
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
-    width: 100%;
+    position: absolute; /* Allows it to cover the page */
+    left: 0; /* Starts from the left */
+    top: 0; /* Starts from the top */
+    height: 100%; /* Uses the full height */
+    width: 100%; /* Uses the full width */
 }
 
+
+/* ================================
+   TEXT ANIMATION
+   ================================ */
+
+/* Defines the spinning/shaking animation */
 @keyframes spin {
+
+    /* Starting position */
     0% {
         transform: rotateZ(0);
     }
 
+    /* Rotates slightly to the right */
     25% {
         transform: rotateZ(10deg);
     }
 
+    /* Returns to the normal position */
     50% {
         transform: rotateZ(0deg);
     }
 
+    /* Rotates slightly to the left */
     75% {
         transform: rotateZ(-10deg);
     }
 }
 
-.type-wrap {
-    font-size: 25px;
-    color: #C4515C;
 
+/* ================================
+   TYPING TEXT
+   ================================ */
+
+/* Styles the text that appears with the typing effect */
+.type-wrap {
+    font-size: 25px; /* Sets the text size */
+    color: #C4515C; /* Sets the text color */
 }
 
+
+/* ================================
+   BIRTHDAY CAKE
+   ================================ */
+
+/* Positions the birthday cake in the center */
 .cake {
-    transform: translateY(-50%);
-    transform: translateX(-50%);
-    left: 50%;
-    position: absolute;
-    padding-top: 250px;
+    transform: translateY(-50%); /* Moves the cake upward */
+    transform: translateX(-50%); /* Moves the cake to the left for centering */
+    left: 50%; /* Places the cake at the horizontal center */
+    position: absolute; /* Allows exact positioning */
+    padding-top: 250px; /* Adds space above the cake */
 }
