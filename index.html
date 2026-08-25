@@ -1,61 +1,145 @@
+<!-- Defines this document as an HTML5 webpage -->
 <html>
 
 <head>
+
+    <!-- Sets the title shown in the browser tab -->
     <title>Happy Birthday</title>
+
+    <!-- Allows the webpage to display special characters correctly -->
     <meta charset="utf-8">
+
+    <!-- Makes the webpage responsive on phones, tablets, and computers -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Loads the Bootstrap CSS framework -->
     <link rel="stylesheet" href="css/bootstrap.min.css">
+
+    <!-- Loads our custom CSS styles -->
     <link rel="stylesheet" href="style.css">
+
 </head>
 
 <body>
+
+    <!-- Main Bootstrap container -->
     <div class="container">
+
+        <!-- Creates a row for the loading screen -->
         <div class="row">
+
+            <!-- Loading screen that appears when the page starts -->
             <div class="loader">
+
+                <!-- Button used to open the birthday page -->
                 <button id="play">OPEN</button>
+
             </div>
         </div>
     </div>
+
+
+    <!-- Background birthday music -->
     <audio class="song" controls loop>
+
+        <!-- Loads the music file -->
         <source src="music.mp3">
-        </source>
+
+        <!-- Message shown if the browser cannot play the audio -->
         Your browser isn't invited for super fun audio time.
+
     </audio>
+
+
+    <!-- Canvas used for the confetti effect -->
     <canvas id="confetti"></canvas>
+
+
+    <!-- Contains the main birthday content -->
     <div class="main">
+
+        <!-- Bootstrap container with top spacing -->
         <div class="container pt-5">
+
+            <!-- Creates a row for the birthday content -->
             <div class="row">
 
+                <!-- Displays the birthday banner image -->
                 <div class="col-12 col-xl-6 mx-auto">
+
+                    <!-- Birthday banner -->
                     <img src="img/banner.png" alt="">
+
                 </div>
 
-                <div class="col-12  text-center">
-                    <div id="name" class="area">Hannah</div>
-                </div>
 
+                <!-- Centers the birthday person's name -->
                 <div class="col-12 text-center">
-                    <div class="type-wrap">
-                        <div id="typed-strings" class="typing">
-                            <h2>Happy Birthday <i id="nae">Gaurav</i></h2>
-                            <h2>Have a wonderful day</h2>
-                            <h2>Filled with joy and happiness.</h2>
-                        </div>
-                        <span id="typed" style="white-space:pre;"></span>
-                    </div>
+
+                    <!-- Displays the name -->
+                    <div id="name" class="area">Hannah</div>
+
                 </div>
 
-                <div class="col-12 col-xl-3 cake">
-                    <img src="img/cake.gif" alt="">
+
+                <!-- Centers the birthday messages -->
+                <div class="col-12 text-center">
+
+                    <!-- Container for the typing animation -->
+                    <div class="type-wrap">
+
+                        <!-- Contains the messages that will be typed one by one -->
+                        <div id="typed-strings" class="typing">
+
+                            <!-- First birthday message -->
+                            <h2>Happy Birthday <i id="nae">Gaurav</i></h2>
+
+                            <!-- Second birthday message -->
+                            <h2>Have a wonderful day</h2>
+
+                            <!-- Third birthday message -->
+                            <h2>Filled with joy and happiness.</h2>
+
+                        </div>
+
+                        <!-- The typed.js script displays the messages here -->
+                        <span id="typed" style="white-space:pre;"></span>
+
+                    </div>
+
                 </div>
+
+
+                <!-- Birthday cake section -->
+                <div class="col-12 col-xl-3 cake">
+
+                    <!-- Displays the animated birthday cake -->
+                    <img src="img/cake.gif" alt="">
+
+                </div>
+
             </div>
         </div>
+
+
+        <!-- Decorative balloon border at the bottom of the page -->
         <img src="img/Balloon-Border.png" width="100%" class="balloon-border">
+
     </div>
+
+
+    <!-- Loads the snowflake animation library -->
+    <script src="https://unpkg.com/magic-snowflakes/dist/snowflakes.min.js"></script>
+
+    <!-- Loads jQuery -->
+    <script src="js/jquery.js"></script>
+
+    <!-- Loads Typed.js for the typing animation -->
+    <script src="js/typed.min.js"></script>
+
+    <!-- Loads the website's custom JavaScript -->
+    <script src="js/script.js"></script>
+
 </body>
-<script src="https://unpkg.com/magic-snowflakes/dist/snowflakes.min.js"></script>
-<script src="js/jquery.js"></script>
-<script src="js/typed.min.js"></script>
-<script src="js/script.js"></script>
 
 </html>
