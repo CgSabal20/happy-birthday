@@ -1,55 +1,89 @@
-var sf = new Snowflakes({
-    color: "#ffd700",
-    minSize: 20
-});
-var url_string = window.location.href; //window.location.href
-var url = new URL(url_string);
-var c = url.searchParams.get("name");
-console.log(c);
-if (c != null) {
-    document.getElementById("name").innerHTML = c;
-    document.getElementById("nae").innerHTML = c;
-}
-$(".main").fadeOut(1);
-$('#play').click(function () {
-    $(".loader").fadeOut(1500);
-    $(".main").fadeIn("slow");
-    sf.destroy();
-    $('.balloon-border').animate({
-        top: -500
-    }, 8000);
-    var audio = $('.song')[0];
-    audio.play();
+$(document.body).ready(function () {
 
-});
-var typed = new Typed("#typed", {
-    stringsElement: '#typed-strings',
-    typeSpeed: 30,
-    backSpeed: 10,
-    loop: true
-});
-var retina = window.devicePixelRatio,
+    // 1. Initialize Red and White Snowflakes
+    var sfRed = new Snowflakes({
+        color: "#ff0000",
+        minSize: 15,
+        maxSize: 30,
+        count: 25
+    });
 
-    // Math shorthands
+    var sfWhite = new Snowflakes({
+        color: "#e9e5e5",
+        minSize: 15,
+        maxSize: 30,
+        count: 25
+    });
+
+    // 2. Parse URL parameters for custom name
+    var urlParams = new URLSearchParams(window.location.search);
+    var customName = urlParams.get("name");
+    
+    if (customName) {
+        $("#name").text(customName);
+        $("#nae").text(customName);
+    }
+
+    // 3. Curtain Opening Click Event
+    $("#curtain-loader").one("click", function () {
+        var $loader = $(this);
+
+        // Slide curtains open and start main content fade simultaneously
+        $loader.addClass("open");
+        $(".main").addClass("visible");
+
+        // Safely destroy snowflakes after transition starts
+        setTimeout(function() {
+            if (sfRed) sfRed.destroy();
+            if (sfWhite) sfWhite.destroy();
+        }, 300);
+
+        // Play audio
+        var audio = $('.song')[0];
+        if (audio) {
+            audio.play().catch(function(err) {
+                console.log("Audio playback error:", err);
+            });
+        }
+
+        // Animate balloon border upward smoothly
+        $('.balloon-border').animate({ top: -500 }, 8000, 'linear');
+
+        // Remove curtain loader element after curtain opening animation ends
+        setTimeout(function () {
+            $loader.fadeOut(600, function() {
+                $loader.remove();
+            });
+        }, 1800);
+    });
+
+    // 4. Initialize Typed.js
+    if ($("#typed-strings").length) {
+        new Typed("#typed", {
+            stringsElement: '#typed-strings',
+            typeSpeed: 30,
+            backSpeed: 10,
+            loop: true
+        });
+    }
+});
+
+/* ================================
+   CONFETTI CANVAS ANIMATION
+   ================================ */
+
+var retina = window.devicePixelRatio || 1,
     PI = Math.PI,
     sqrt = Math.sqrt,
     round = Math.round,
     random = Math.random,
     cos = Math.cos,
     sin = Math.sin,
-
-    // Local WindowAnimationTiming interface
     rAF = window.requestAnimationFrame,
     cAF = window.cancelAnimationFrame || window.cancelRequestAnimationFrame,
-    _now = Date.now || function () {
-        return new Date().getTime();
-    };
+    _now = Date.now || function () { return new Date().getTime(); };
 
-// Local WindowAnimationTiming interface polyfill
 (function (w) {
-    /**
-     * Fallback implementation.
-     */
     var prev = _now();
 
     function fallback(fn) {
@@ -60,9 +94,6 @@ var retina = window.devicePixelRatio,
         return req;
     }
 
-    /**
-     * Cancel.
-     */
     var cancel = w.cancelAnimationFrame ||
         w.webkitCancelAnimationFrame ||
         w.clearTimeout;
@@ -94,29 +125,30 @@ document.addEventListener("DOMContentLoaded", function () {
         ];
 
     function Vector2(_x, _y) {
-        this.x = _x, this.y = _y;
+        this.x = _x; 
+        this.y = _y;
         this.Length = function () {
             return sqrt(this.SqrLength());
-        }
+        };
         this.SqrLength = function () {
             return this.x * this.x + this.y * this.y;
-        }
+        };
         this.Add = function (_vec) {
             this.x += _vec.x;
             this.y += _vec.y;
-        }
+        };
         this.Sub = function (_vec) {
             this.x -= _vec.x;
             this.y -= _vec.y;
-        }
+        };
         this.Div = function (_f) {
             this.x /= _f;
             this.y /= _f;
-        }
+        };
         this.Mul = function (_f) {
             this.x *= _f;
             this.y *= _f;
-        }
+        };
         this.Normalize = function () {
             var sqrLen = this.SqrLength();
             if (sqrLen != 0) {
@@ -124,7 +156,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 this.x *= factor;
                 this.y *= factor;
             }
-        }
+        };
         this.Normalized = function () {
             var sqrLen = this.SqrLength();
             if (sqrLen != 0) {
@@ -132,35 +164,36 @@ document.addEventListener("DOMContentLoaded", function () {
                 return new Vector2(this.x * factor, this.y * factor);
             }
             return new Vector2(0, 0);
-        }
+        };
     }
+
     Vector2.Lerp = function (_vec0, _vec1, _t) {
         return new Vector2((_vec1.x - _vec0.x) * _t + _vec0.x, (_vec1.y - _vec0.y) * _t + _vec0.y);
-    }
+    };
     Vector2.Distance = function (_vec0, _vec1) {
         return sqrt(Vector2.SqrDistance(_vec0, _vec1));
-    }
+    };
     Vector2.SqrDistance = function (_vec0, _vec1) {
         var x = _vec0.x - _vec1.x;
         var y = _vec0.y - _vec1.y;
-        return (x * x + y * y + z * z);
-    }
+        return (x * x + y * y);
+    };
     Vector2.Scale = function (_vec0, _vec1) {
         return new Vector2(_vec0.x * _vec1.x, _vec0.y * _vec1.y);
-    }
+    };
     Vector2.Min = function (_vec0, _vec1) {
         return new Vector2(Math.min(_vec0.x, _vec1.x), Math.min(_vec0.y, _vec1.y));
-    }
+    };
     Vector2.Max = function (_vec0, _vec1) {
         return new Vector2(Math.max(_vec0.x, _vec1.x), Math.max(_vec0.y, _vec1.y));
-    }
+    };
     Vector2.ClampMagnitude = function (_vec0, _len) {
-        var vecNorm = _vec0.Normalized;
+        var vecNorm = _vec0.Normalized();
         return new Vector2(vecNorm.x * _len, vecNorm.y * _len);
-    }
+    };
     Vector2.Sub = function (_vec0, _vec1) {
-        return new Vector2(_vec0.x - _vec1.x, _vec0.y - _vec1.y, _vec0.z - _vec1.z);
-    }
+        return new Vector2(_vec0.x - _vec1.x, _vec0.y - _vec1.y);
+    };
 
     function EulerMass(_x, _y, _mass, _drag) {
         this.position = new Vector2(_x, _y);
@@ -170,7 +203,7 @@ document.addEventListener("DOMContentLoaded", function () {
         this.velocity = new Vector2(0, 0);
         this.AddForce = function (_f) {
             this.force.Add(_f);
-        }
+        };
         this.Integrate = function (_dt) {
             var acc = this.CurrentForce(this.position);
             acc.Div(this.mass);
@@ -180,7 +213,7 @@ document.addEventListener("DOMContentLoaded", function () {
             acc.Mul(_dt);
             this.velocity.Add(acc);
             this.force = new Vector2(0, 0);
-        }
+        };
         this.CurrentForce = function (_pos, _vel) {
             var totalForce = new Vector2(this.force.x, this.force.y);
             var speed = this.velocity.Length();
@@ -188,7 +221,7 @@ document.addEventListener("DOMContentLoaded", function () {
             dragVel.Mul(this.drag * this.mass * speed);
             totalForce.Sub(dragVel);
             return totalForce;
-        }
+        };
     }
 
     function ConfettiPaper(_x, _y) {
@@ -215,13 +248,13 @@ document.addEventListener("DOMContentLoaded", function () {
             this.time += _dt;
             this.rotation += this.rotationSpeed * _dt;
             this.cosA = cos(DEG_TO_RAD * this.rotation);
-            this.pos.x += cos(this.time * this.oscillationSpeed) * this.xSpeed * _dt
+            this.pos.x += cos(this.time * this.oscillationSpeed) * this.xSpeed * _dt;
             this.pos.y += this.ySpeed * _dt;
             if (this.pos.y > ConfettiPaper.bounds.y) {
                 this.pos.x = random() * ConfettiPaper.bounds.x;
                 this.pos.y = 0;
             }
-        }
+        };
         this.Draw = function (_g) {
             if (this.cosA > 0) {
                 _g.fillStyle = this.frontColor;
@@ -235,7 +268,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
             _g.closePath();
             _g.fill();
-        }
+        };
     }
     ConfettiPaper.bounds = new Vector2(0, 0);
 
@@ -290,7 +323,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (this.position.y > ConfettiRibbon.bounds.y + this.particleDist * this.particleCount) {
                 this.Reset();
             }
-        }
+        };
         this.Reset = function () {
             this.position.y = -random() * ConfettiRibbon.bounds.y;
             this.position.x = random() * ConfettiRibbon.bounds.x;
@@ -360,33 +393,38 @@ document.addEventListener("DOMContentLoaded", function () {
                     _g.fill();
                 }
             }
-        }
+        };
         this.Side = function (x1, y1, x2, y2, x3, y3) {
             return ((x1 - x2) * (y3 - y2) - (y1 - y2) * (x3 - x2));
-        }
+        };
     }
     ConfettiRibbon.bounds = new Vector2(0, 0);
-    confetti = {};
-    confetti.Context = function (id) {
+
+    var confettiObj = {};
+    confettiObj.Context = function (id) {
         var i = 0;
         var canvas = document.getElementById(id);
+        if (!canvas) return;
+
         var canvasParent = canvas.parentNode;
         var canvasWidth = canvasParent.offsetWidth;
         var canvasHeight = canvasParent.offsetHeight;
         canvas.width = canvasWidth * retina;
         canvas.height = canvasHeight * retina;
         var context = canvas.getContext('2d');
-        var interval = null;
         var confettiRibbons = new Array();
+        
         ConfettiRibbon.bounds = new Vector2(canvasWidth, canvasHeight);
         for (i = 0; i < confettiRibbonCount; i++) {
             confettiRibbons[i] = new ConfettiRibbon(random() * canvasWidth, -random() * canvasHeight * 2, ribbonPaperCount, ribbonPaperDist, ribbonPaperThick, 45, 1, 0.05);
         }
+
         var confettiPapers = new Array();
         ConfettiPaper.bounds = new Vector2(canvasWidth, canvasHeight);
         for (i = 0; i < confettiPaperCount; i++) {
             confettiPapers[i] = new ConfettiPaper(random() * canvasWidth, random() * canvasHeight);
         }
+
         this.resize = function () {
             canvasWidth = canvasParent.offsetWidth;
             canvasHeight = canvasParent.offsetHeight;
@@ -394,15 +432,17 @@ document.addEventListener("DOMContentLoaded", function () {
             canvas.height = canvasHeight * retina;
             ConfettiPaper.bounds = new Vector2(canvasWidth, canvasHeight);
             ConfettiRibbon.bounds = new Vector2(canvasWidth, canvasHeight);
-        }
+        };
+
         this.start = function () {
-            this.stop()
-            var context = this;
+            this.stop();
             this.update();
-        }
+        };
+
         this.stop = function () {
             cAF(this.interval);
-        }
+        };
+
         this.update = function () {
             var i = 0;
             context.clearRect(0, 0, canvas.width, canvas.height);
@@ -414,14 +454,17 @@ document.addEventListener("DOMContentLoaded", function () {
                 confettiRibbons[i].Update(duration);
                 confettiRibbons[i].Draw(context);
             }
+            var self = this;
             this.interval = rAF(function () {
-                confetti.update();
+                self.update();
             });
-        }
+        };
     };
-    var confetti = new confetti.Context('confetti');
+
+    var confetti = new confettiObj.Context('confetti');
     confetti.start();
-    window.addEventListener('resize', function (event) {
+
+    window.addEventListener('resize', function () {
         confetti.resize();
     });
 });
