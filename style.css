@@ -27,7 +27,7 @@ img {
 
 
 /* ================================
-   THEATER CURTAIN LOADER
+   THEATER CURTAIN LOADER (GENTLE WIND)
    ================================ */
 
 .loader {
@@ -37,7 +37,8 @@ img {
     background: #000 url("img/back.png") center / cover no-repeat;
     cursor: pointer;
     overflow: hidden;
-    transition: opacity 0.6s ease-out;
+    transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+    perspective: 1000px;
 }
 
 /* Curtain panels */
@@ -48,7 +49,6 @@ img {
     height: 100%;
     z-index: 1000;
     will-change: transform;
-    transition: transform 1.8s cubic-bezier(0.77, 0, 0.175, 1);
     
     /* Rich red velvet fabric gradient effect */
     background: repeating-linear-gradient(
@@ -59,26 +59,84 @@ img {
         #8b0000 75px,
         #500000 100px
     );
-    box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+    box-shadow: 0 0 35px rgba(0, 0, 0, 0.85);
 }
 
 .curtain-left {
     left: 0;
-    transform-origin: left center;
+    transform-origin: top left;
+    /* Soft ambient breeze when closed */
+    animation: gentle-breeze-left 5s ease-in-out infinite alternate;
 }
 
 .curtain-right {
     right: 0;
-    transform-origin: right center;
+    transform-origin: top right;
+    /* Soft ambient breeze when closed */
+    animation: gentle-breeze-right 5.2s ease-in-out infinite alternate;
 }
 
-/* Open state classes triggered via JS */
+/* Open state: smooth exponential slide with subtle bottom flare */
 .loader.open .curtain-left {
-    transform: translate3d(-100%, 0, 0);
+    animation: gentle-open-left 2.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .loader.open .curtain-right {
-    transform: translate3d(100%, 0, 0);
+    animation: gentle-open-right 2.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Keyframes: Gentle idle sway at the bottom */
+@keyframes gentle-breeze-left {
+    0% {
+        transform: rotate(0deg) skewX(0deg);
+    }
+    50% {
+        transform: rotate(-0.8deg) skewX(1.5deg);
+    }
+    100% {
+        transform: rotate(0.5deg) skewX(-1deg);
+    }
+}
+
+@keyframes gentle-breeze-right {
+    0% {
+        transform: rotate(0deg) skewX(0deg);
+    }
+    50% {
+        transform: rotate(0.8deg) skewX(-1.5deg);
+    }
+    100% {
+        transform: rotate(-0.5deg) skewX(1deg);
+    }
+}
+
+/* Keyframes: Soft, graceful open motion */
+@keyframes gentle-open-left {
+    0% {
+        transform: translate3d(0, 0, 0) rotate(0deg) skewX(0deg);
+    }
+    40% {
+        /* Bottom edge softly trails outward */
+        transform: translate3d(-40%, 0, 0) rotate(-2.5deg) skewX(4deg);
+    }
+    100% {
+        /* Smooth exit offscreen */
+        transform: translate3d(-100%, 0, 0) rotate(0deg) skewX(0deg);
+    }
+}
+
+@keyframes gentle-open-right {
+    0% {
+        transform: translate3d(0, 0, 0) rotate(0deg) skewX(0deg);
+    }
+    40% {
+        /* Bottom edge softly trails outward */
+        transform: translate3d(40%, 0, 0) rotate(2.5deg) skewX(-4deg);
+    }
+    100% {
+        /* Smooth exit offscreen */
+        transform: translate3d(100%, 0, 0) rotate(0deg) skewX(0deg);
+    }
 }
 
 
@@ -88,12 +146,17 @@ img {
 
 .main {
     opacity: 0;
-    will-change: opacity;
-    transition: opacity 1.2s ease-in-out;
+    transform: scale(0.98);
+    will-change: opacity, transform;
+    /* Smooth exponential ease-out fade-in with a subtle scale up */
+    transition: 
+        opacity 1.6s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 1.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .main.visible {
     opacity: 1;
+    transform: scale(1);
 }
 
 .area {
@@ -103,7 +166,8 @@ img {
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: -1px;
-    animation: gentle-wobble 3s ease-in-out infinite;
+    /* Sine curve easing produces fluid sway motions */
+    animation: gentle-wobble 4s ease-in-out infinite;
     text-shadow: 
         0 2px 4px rgba(0, 0, 0, 0.1),
         0 0 20px rgba(255, 255, 255, 0.8);
@@ -116,8 +180,8 @@ img {
 
 @keyframes gentle-wobble {
     0%, 100% { transform: rotate(0deg); }
-    25%      { transform: rotate(3deg); }
-    75%      { transform: rotate(-3deg); }
+    25%      { transform: rotate(2.5deg); }
+    75%      { transform: rotate(-2.5deg); }
 }
 
 .type-wrap {
@@ -137,7 +201,7 @@ img {
     opacity: 0.85;
     z-index: 10;
     pointer-events: none;
-    will-change: top;
+    will-change: top, transform;
 }
 
 #confetti {
@@ -149,7 +213,7 @@ img {
 
 .cake {
     position: absolute;
-    top: 50%;
+    top: 200%;
     left: 50%;
     transform: translate(-50%, -50%);
     display: flex;

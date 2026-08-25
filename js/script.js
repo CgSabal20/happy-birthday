@@ -28,15 +28,19 @@ $(document.body).ready(function () {
     $("#curtain-loader").one("click", function () {
         var $loader = $(this);
 
-        // Slide curtains open and start main content fade simultaneously
+        // Trigger curtain opening state
         $loader.addClass("open");
-        $(".main").addClass("visible");
 
-        // Safely destroy snowflakes after transition starts
+        // Stagger main content display slightly for a seamless cross-fade effect
+        setTimeout(function() {
+            $(".main").addClass("visible");
+        }, 150);
+
+        // Destroy snowflakes smoothly during curtain reveal
         setTimeout(function() {
             if (sfRed) sfRed.destroy();
             if (sfWhite) sfWhite.destroy();
-        }, 300);
+        }, 400);
 
         // Play audio
         var audio = $('.song')[0];
@@ -46,15 +50,15 @@ $(document.body).ready(function () {
             });
         }
 
-        // Animate balloon border upward smoothly
-        $('.balloon-border').animate({ top: -500 }, 8000, 'linear');
+        // Animate balloon border upward with smooth easing
+        $('.balloon-border').animate({ top: -500 }, 9000, 'swing');
 
-        // Remove curtain loader element after curtain opening animation ends
+        // Smoothly fade out and unmount curtain loader
         setTimeout(function () {
-            $loader.fadeOut(600, function() {
+            $loader.fadeOut(1000, function() {
                 $loader.remove();
             });
-        }, 1800);
+        }, 1600);
     });
 
     // 4. Initialize Typed.js
@@ -69,7 +73,7 @@ $(document.body).ready(function () {
 });
 
 /* ================================
-   CONFETTI CANVAS ANIMATION
+   CONFETTI CANVAS ANIMATION (SMOOTHENED)
    ================================ */
 
 var retina = window.devicePixelRatio || 1,
@@ -108,15 +112,12 @@ var retina = window.devicePixelRatio || 1,
 }(window));
 
 document.addEventListener("DOMContentLoaded", function () {
-    var speed = 50,
-        duration = (1.0 / speed),
-        confettiRibbonCount = 10,
+    var confettiRibbonCount = 10,
         ribbonPaperCount = 15,
         ribbonPaperDist = 8.0,
         ribbonPaperThick = 8.0,
         confettiPaperCount = 10,
         DEG_TO_RAD = PI / 180,
-        RAD_TO_DEG = 180 / PI,
         colors = [
             ["#df0049", "#660671"],
             ["#00e857", "#005291"],
@@ -167,30 +168,6 @@ document.addEventListener("DOMContentLoaded", function () {
         };
     }
 
-    Vector2.Lerp = function (_vec0, _vec1, _t) {
-        return new Vector2((_vec1.x - _vec0.x) * _t + _vec0.x, (_vec1.y - _vec0.y) * _t + _vec0.y);
-    };
-    Vector2.Distance = function (_vec0, _vec1) {
-        return sqrt(Vector2.SqrDistance(_vec0, _vec1));
-    };
-    Vector2.SqrDistance = function (_vec0, _vec1) {
-        var x = _vec0.x - _vec1.x;
-        var y = _vec0.y - _vec1.y;
-        return (x * x + y * y);
-    };
-    Vector2.Scale = function (_vec0, _vec1) {
-        return new Vector2(_vec0.x * _vec1.x, _vec0.y * _vec1.y);
-    };
-    Vector2.Min = function (_vec0, _vec1) {
-        return new Vector2(Math.min(_vec0.x, _vec1.x), Math.min(_vec0.y, _vec1.y));
-    };
-    Vector2.Max = function (_vec0, _vec1) {
-        return new Vector2(Math.max(_vec0.x, _vec1.x), Math.max(_vec0.y, _vec1.y));
-    };
-    Vector2.ClampMagnitude = function (_vec0, _len) {
-        var vecNorm = _vec0.Normalized();
-        return new Vector2(vecNorm.x * _len, vecNorm.y * _len);
-    };
     Vector2.Sub = function (_vec0, _vec1) {
         return new Vector2(_vec0.x - _vec1.x, _vec0.y - _vec1.y);
     };
@@ -214,7 +191,7 @@ document.addEventListener("DOMContentLoaded", function () {
             this.velocity.Add(acc);
             this.force = new Vector2(0, 0);
         };
-        this.CurrentForce = function (_pos, _vel) {
+        this.CurrentForce = function (_pos) {
             var totalForce = new Vector2(this.force.x, this.force.y);
             var speed = this.velocity.Length();
             var dragVel = new Vector2(this.velocity.x, this.velocity.y);
@@ -256,11 +233,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         };
         this.Draw = function (_g) {
-            if (this.cosA > 0) {
-                _g.fillStyle = this.frontColor;
-            } else {
-                _g.fillStyle = this.backColor;
-            }
+            _g.fillStyle = this.cosA > 0 ? this.frontColor : this.backColor;
             _g.beginPath();
             _g.moveTo((this.pos.x + this.corners[0].x * this.size) * retina, (this.pos.y + this.corners[0].y * this.size * this.cosA) * retina);
             for (var i = 1; i < 4; i++) {
@@ -306,7 +279,7 @@ document.addEventListener("DOMContentLoaded", function () {
             for (i = 1; i < this.particleCount; i++) {
                 var dirP = Vector2.Sub(this.particles[i - 1].position, this.particles[i].position);
                 dirP.Normalize();
-                dirP.Mul((delta / _dt) * this.velocityInherit);
+                dirP.Mul((delta / Math.max(_dt, 0.001)) * this.velocityInherit);
                 this.particles[i].AddForce(dirP);
             }
             for (i = 1; i < this.particleCount; i++) {
@@ -345,53 +318,29 @@ document.addEventListener("DOMContentLoaded", function () {
             for (var i = 0; i < this.particleCount - 1; i++) {
                 var p0 = new Vector2(this.particles[i].position.x + this.xOff, this.particles[i].position.y + this.yOff);
                 var p1 = new Vector2(this.particles[i + 1].position.x + this.xOff, this.particles[i + 1].position.y + this.yOff);
-                if (this.Side(this.particles[i].position.x, this.particles[i].position.y, this.particles[i + 1].position.x, this.particles[i + 1].position.y, p1.x, p1.y) < 0) {
-                    _g.fillStyle = this.frontColor;
-                    _g.strokeStyle = this.frontColor;
-                } else {
-                    _g.fillStyle = this.backColor;
-                    _g.strokeStyle = this.backColor;
-                }
+                
+                var isFront = this.Side(this.particles[i].position.x, this.particles[i].position.y, this.particles[i + 1].position.x, this.particles[i + 1].position.y, p1.x, p1.y) < 0;
+                _g.fillStyle = isFront ? this.frontColor : this.backColor;
+                _g.strokeStyle = isFront ? this.frontColor : this.backColor;
+
+                _g.beginPath();
                 if (i == 0) {
-                    _g.beginPath();
                     _g.moveTo(this.particles[i].position.x * retina, this.particles[i].position.y * retina);
                     _g.lineTo(this.particles[i + 1].position.x * retina, this.particles[i + 1].position.y * retina);
                     _g.lineTo(((this.particles[i + 1].position.x + p1.x) * 0.5) * retina, ((this.particles[i + 1].position.y + p1.y) * 0.5) * retina);
-                    _g.closePath();
-                    _g.stroke();
-                    _g.fill();
-                    _g.beginPath();
-                    _g.moveTo(p1.x * retina, p1.y * retina);
-                    _g.lineTo(p0.x * retina, p0.y * retina);
-                    _g.lineTo(((this.particles[i + 1].position.x + p1.x) * 0.5) * retina, ((this.particles[i + 1].position.y + p1.y) * 0.5) * retina);
-                    _g.closePath();
-                    _g.stroke();
-                    _g.fill();
                 } else if (i == this.particleCount - 2) {
-                    _g.beginPath();
                     _g.moveTo(this.particles[i].position.x * retina, this.particles[i].position.y * retina);
                     _g.lineTo(this.particles[i + 1].position.x * retina, this.particles[i + 1].position.y * retina);
                     _g.lineTo(((this.particles[i].position.x + p0.x) * 0.5) * retina, ((this.particles[i].position.y + p0.y) * 0.5) * retina);
-                    _g.closePath();
-                    _g.stroke();
-                    _g.fill();
-                    _g.beginPath();
-                    _g.moveTo(p1.x * retina, p1.y * retina);
-                    _g.lineTo(p0.x * retina, p0.y * retina);
-                    _g.lineTo(((this.particles[i].position.x + p0.x) * 0.5) * retina, ((this.particles[i].position.y + p0.y) * 0.5) * retina);
-                    _g.closePath();
-                    _g.stroke();
-                    _g.fill();
                 } else {
-                    _g.beginPath();
                     _g.moveTo(this.particles[i].position.x * retina, this.particles[i].position.y * retina);
                     _g.lineTo(this.particles[i + 1].position.x * retina, this.particles[i + 1].position.y * retina);
                     _g.lineTo(p1.x * retina, p1.y * retina);
                     _g.lineTo(p0.x * retina, p0.y * retina);
-                    _g.closePath();
-                    _g.stroke();
-                    _g.fill();
                 }
+                _g.closePath();
+                _g.stroke();
+                _g.fill();
             }
         };
         this.Side = function (x1, y1, x2, y2, x3, y3) {
@@ -402,7 +351,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     var confettiObj = {};
     confettiObj.Context = function (id) {
-        var i = 0;
         var canvas = document.getElementById(id);
         if (!canvas) return;
 
@@ -415,15 +363,17 @@ document.addEventListener("DOMContentLoaded", function () {
         var confettiRibbons = new Array();
         
         ConfettiRibbon.bounds = new Vector2(canvasWidth, canvasHeight);
-        for (i = 0; i < confettiRibbonCount; i++) {
+        for (var i = 0; i < confettiRibbonCount; i++) {
             confettiRibbons[i] = new ConfettiRibbon(random() * canvasWidth, -random() * canvasHeight * 2, ribbonPaperCount, ribbonPaperDist, ribbonPaperThick, 45, 1, 0.05);
         }
 
         var confettiPapers = new Array();
         ConfettiPaper.bounds = new Vector2(canvasWidth, canvasHeight);
-        for (i = 0; i < confettiPaperCount; i++) {
-            confettiPapers[i] = new ConfettiPaper(random() * canvasWidth, random() * canvasHeight);
+        for (var j = 0; j < confettiPaperCount; j++) {
+            confettiPapers[j] = new ConfettiPaper(random() * canvasWidth, random() * canvasHeight);
         }
+
+        var lastTime = _now();
 
         this.resize = function () {
             canvasWidth = canvasParent.offsetWidth;
@@ -436,6 +386,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         this.start = function () {
             this.stop();
+            lastTime = _now();
             this.update();
         };
 
@@ -444,16 +395,22 @@ document.addEventListener("DOMContentLoaded", function () {
         };
 
         this.update = function () {
-            var i = 0;
+            var nowTime = _now();
+            var dt = (nowTime - lastTime) / 1000.0;
+            lastTime = nowTime;
+
+            // Cap dt to avoid sudden huge jumps when switching browser tabs
+            if (dt > 0.1) dt = 0.016;
+
             context.clearRect(0, 0, canvas.width, canvas.height);
-            for (i = 0; i < confettiPaperCount; i++) {
-                confettiPapers[i].Update(duration);
+            for (var i = 0; i < confettiPaperCount; i++) {
+                confettiPapers[i].Update(dt);
                 confettiPapers[i].Draw(context);
             }
-            for (i = 0; i < confettiRibbonCount; i++) {
-                confettiRibbons[i].Update(duration);
-                confettiRibbons[i].Draw(context);
+            for (var j = 0; j < confettiRibbonCount; j++) {
+                confettiRibbons[j].Update(dt);
             }
+
             var self = this;
             this.interval = rAF(function () {
                 self.update();
