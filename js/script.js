@@ -1,20 +1,5 @@
 $(document.body).ready(function () {
 
-    // 1. Initialize Red and White Snowflakes
-    var sfRed = new Snowflakes({
-        color: "#ff0000",
-        minSize: 15,
-        maxSize: 30,
-        count: 25
-    });
-
-    var sfWhite = new Snowflakes({
-        color: "#e9e5e5",
-        minSize: 15,
-        maxSize: 30,
-        count: 25
-    });
-
     // 2. Parse URL parameters for custom name
     var urlParams = new URLSearchParams(window.location.search);
     var customName = urlParams.get("name");
@@ -23,6 +8,18 @@ $(document.body).ready(function () {
         $("#name").text(customName);
         $("#nae").text(customName);
     }
+
+    // Open PvZ-style Letter
+    $("#pvz-envelope").on("click", function () {
+        $("#pvz-letter-modal").addClass("active");
+    });
+
+    // Close PvZ-style Letter when clicking X or backdrop
+    $(".pvz-close-btn, #pvz-letter-modal").on("click", function (e) {
+        if (e.target === this) {
+            $("#pvz-letter-modal").removeClass("active");
+        }
+    });
 
     // 3. Curtain Opening Click Event
     $("#curtain-loader").one("click", function () {
@@ -65,8 +62,11 @@ $(document.body).ready(function () {
     if ($("#typed-strings").length) {
         new Typed("#typed", {
             stringsElement: '#typed-strings',
-            typeSpeed: 30,
-            backSpeed: 10,
+            typeSpeed: 35,
+            backSpeed: 3,
+            backDelay: 1500,     // Time pause before erasing first sentence (in ms)
+            startDelay: 500,
+            showCursor: true,
             loop: true
         });
     }

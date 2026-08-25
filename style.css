@@ -173,7 +173,7 @@ img {
         0 0 20px rgba(255, 255, 255, 0.8);
 }
 
-#nae {
+#name {
     text-transform: capitalize;
     display: inline-block;
 }
@@ -192,17 +192,6 @@ img {
     font-weight: 500;
 }
 
-/* Overlays */
-.balloon-border {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    opacity: 0.85;
-    z-index: 10;
-    pointer-events: none;
-    will-change: top, transform;
-}
 
 #confetti {
     position: fixed;
@@ -213,7 +202,7 @@ img {
 
 .cake {
     position: absolute;
-    top: 200%;
+    top: 466px;
     left: 50%;
     transform: translate(-50%, -50%);
     display: flex;
@@ -221,8 +210,157 @@ img {
     align-items: center;
 }
 
+.banner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1rem;    /* Distance from top of the page */
+    margin-bottom: 2rem; /* Distance between banner and name */
+}
+
+.banner img {
+    width: 300%;       /* Fill the container width */
+    max-width: 800px;  /* Set your preferred maximum width (increase as needed, e.g. 900px) */
+    height: auto;
+    object-fit: contain;
+}
 /* Snowflake contrast filter */
 .snowflake, 
 [class*="snowflake"] {
     filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.4));
+}
+
+/* ================================
+   PLANTS VS ZOMBIES LETTER ANIMATION
+   ================================ */
+
+/* Floating Envelope Icon Button (Positioned Bottom-Right) */
+.envelope-wrapper {
+    position: fixed;
+    bottom: 20px;
+    right: 25px;
+    z-index: 100;
+    display: inline-block;
+    cursor: pointer;
+    perspective: 1000px;
+    animation: pvz-float 2.5s ease-in-out infinite alternate;
+}
+
+/* Borderless, Transparent Container for Pure Envelope Icon */
+.envelope-icon {
+    background: transparent;
+    border: none;
+    width: auto;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.letter-symbol {
+    font-size: 3.5rem;
+    line-height: 1;
+    filter: drop-shadow(0 6px 8px rgba(0, 0, 0, 0.3));
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+/* Hover & Active Feedback on Floating Icon */
+.envelope-wrapper:hover .letter-symbol {
+    transform: translateY(-5px) scale(1.15) rotate(5deg);
+    filter: drop-shadow(0 10px 14px rgba(0, 0, 0, 0.4));
+}
+
+.envelope-wrapper:active .letter-symbol {
+    transform: translateY(2px) scale(0.95);
+    filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.3));
+}
+
+/* Floating Idle Animation */
+@keyframes pvz-float {
+    0% { transform: translateY(0px) rotate(-3deg); }
+    100% { transform: translateY(-12px) rotate(3deg); }
+}
+
+/* PVZ-style Pop-up Modal Overlay (Softened Blur & Overlay) */
+/* PVZ-style Pop-up Modal Overlay (Full Viewport Coverage) */
+.pvz-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 2000;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    overscroll-behavior: contain;
+}
+
+.pvz-modal-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Letter Card Pop & Zoom Animation */
+.pvz-letter-card {
+    background: #fffbf0;
+    border: 6px solid #6b3e26;
+    border-radius: 16px;
+    padding: 30px 40px;
+    max-width: 500px;
+    width: 90%;
+    position: relative;
+    box-shadow: 0 0 0 6px #d4a373, 0 25px 40px rgba(0, 0, 0, 0.5);
+    transform: scale(0.1) rotate(-12deg);
+    opacity: 0;
+    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease;
+}
+
+.pvz-modal-overlay.active .pvz-letter-card {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+}
+
+/* Close Button */
+.pvz-close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: #6b3e26;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.pvz-letter-header h3 {
+    color: #8c323b;
+    font-size: 1.8rem;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 20px;
+    border-bottom: 2px dashed #d4a373;
+    padding-bottom: 10px;
+}
+
+.pvz-letter-body {
+    color: #4a2c1d;
+    font-size: 1.15rem;
+    line-height: 1.6;
+}
+
+.pvz-letter-signature {
+    margin-top: 20px;
+    text-align: right;
+    font-weight: 700;
+    font-style: italic;
+    color: #8c323b;
 }
