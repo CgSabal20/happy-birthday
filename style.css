@@ -233,6 +233,7 @@ img {
     border-right: 0.15em solid #8c323b; /* Cursor effect */
     animation: blink-caret 0.75s step-end infinite;
 }
+
 /* Snowflake contrast filter */
 .snowflake, 
 [class*="snowflake"] {
