@@ -218,11 +218,20 @@ img {
     margin-bottom: 2rem; /* Distance between banner and name */
 }
 
+
 .banner img {
-    width: 300%;       /* Fill the container width */
-    max-width: 800px;  /* Set your preferred maximum width (increase as needed, e.g. 900px) */
+    width: 105%;       /* Fill the container width */
+    max-width: 600px;  /* Set your preferred maximum width (increase as needed, e.g. 900px) */
     height: auto;
     object-fit: contain;
+}
+
+.type-wrap {
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    border-right: 0.15em solid #8c323b; /* Cursor effect */
+    animation: blink-caret 0.75s step-end infinite;
 }
 /* Snowflake contrast filter */
 .snowflake, 
