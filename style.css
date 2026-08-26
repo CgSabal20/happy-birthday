@@ -282,8 +282,8 @@ img {
     100% { transform: translateY(-12px) rotate(3deg); }
 }
 
-/* PVZ-style Pop-up Modal Overlay (Softened Blur & Overlay) */
-/* PVZ-style Pop-up Modal Overlay (Full Viewport Coverage) */
+/*Pop-up Modal Overlay (Softened Blur & Overlay) */
+/*Pop-up Modal Overlay (Full Viewport Coverage) */
 .pvz-modal-overlay {
     position: fixed;
     top: 0;
